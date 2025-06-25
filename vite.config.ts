@@ -1,8 +1,31 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
-import tailwindcss from '@tailwindcss/vite'
+import { defineConfig, loadEnv } from 'vite';
+import react from '@vitejs/plugin-react';
+import tailwindcss from '@tailwindcss/vite';
+import codegen from 'vite-plugin-graphql-codegen';
+import type { CodegenConfig } from '@graphql-codegen/cli';
 
 // https://vite.dev/config/
-export default defineConfig({
-  plugins: [react(), tailwindcss()],
-})
+export default defineConfig(({ mode }) => {
+  const env = loadEnv(mode, process.cwd());
+  const CI_BUILD = !!process.env.CI;
+
+  const config: CodegenConfig = {
+    overwrite: true,
+    schema: `${env.VITE_API_HOST}/graphql`,
+    documents: 'src/**/*.tsx',
+    generates: {
+      '.src/gql/': {
+        preset: 'client',
+        plugins: [],
+      },
+      './graphql.schema.json': {
+        plugins: ['introspection'],
+      },
+    },
+    ignoreNoDocuments: true,
+  };
+
+  return {
+    plugins: [react(), tailwindcss(), codegen({ config, runOnBuild: !CI_BUILD })],
+  };
+});
