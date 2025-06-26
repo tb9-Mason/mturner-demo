@@ -14,7 +14,7 @@ export default defineConfig(({ mode }) => {
     schema: `${env.VITE_API_HOST}/graphql`,
     documents: 'src/**/*.tsx',
     generates: {
-      '.src/gql/': {
+      'src/gql/': {
         preset: 'client',
         plugins: [],
       },
