@@ -1,11 +1,7 @@
 import type { PropsWithChildren } from 'react';
-import { ApolloClient, ApolloProvider, InMemoryCache } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client';
+import { gqlClient } from '../utilities';
 
 export const GqlProvider = ({ children }: PropsWithChildren) => {
-  const client = new ApolloClient({
-    uri: `${import.meta.env.VITE_API_HOST}/graphql`,
-    cache: new InMemoryCache(),
-  });
-
-  return <ApolloProvider client={client}>{children}</ApolloProvider>;
+  return <ApolloProvider client={gqlClient}>{children}</ApolloProvider>;
 };

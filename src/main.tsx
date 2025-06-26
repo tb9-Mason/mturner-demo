@@ -1,18 +1,31 @@
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
 import './index.css';
-import App from './App.tsx';
-import { Footer, Header } from './common/components/layout';
+import { Home } from './routes';
+import { Footer, Header } from './common/components';
 import { GqlProvider } from './common/providers';
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: (
+      <GqlProvider>
+        <div className="flex flex-col min-h-screen">
+          <Header />
+          <div className="flex w-full flex-1 max-w-screen-xl mx-auto px-6">
+            <Outlet />
+          </div>
+          <Footer />
+        </div>
+      </GqlProvider>
+    ),
+    children: [{ element: <Home />, index: true }],
+  },
+]);
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
-    <GqlProvider>
-      <div className="flex flex-col min-h-screen">
-        <Header />
-        <App />
-        <Footer />
-      </div>
-    </GqlProvider>
+    <RouterProvider router={router} />
   </StrictMode>,
 );
