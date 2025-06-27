@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { useLoaderData } from 'react-router';
 import { useMutation, useReadQuery } from '@apollo/client';
 import { createColumnHelper } from '@tanstack/react-table';
@@ -34,45 +34,47 @@ export const MusicTable = () => {
     }
   }, [userRatingData]);
 
-  const columns = [
-    columnHelper.accessor('name', {
-      header: 'Name',
-    }),
-    columnHelper.accessor('releaseDate', {
-      header: 'Release Date',
-      cell: (ctx) => {
-        return dateFormatter.format(new Date(ctx.getValue()));
-      },
-    }),
-    columnHelper.accessor('artist.name', { header: 'Artist' }),
-    columnHelper.accessor('staticRating', {
-      header: "Mason's Rating",
-      cell: (ctx) => {
-        return <Rating id={ctx.cell.id} value={ctx.getValue()} />;
-      },
-    }),
-    columnHelper.accessor('userRating', {
-      header: 'User Rating',
-      cell: (ctx) => {
-        const uuid = ctx.row.original.uuid;
-        return (
-          <Rating
-            id={ctx.cell.id}
-            value={ctx.getValue()}
-            handleClick={(index) => {
-              setLoadingAlbums((prev) => {
-                return { ...prev, [uuid]: true };
-              });
-              updateUserRatingMutation({ variables: { data: { uuid, rating: index + 1 } } });
-            }}
-            loading={loadingAlbums[uuid]}
-          />
-        );
-      },
-    }),
-  ] satisfies ReturnType<typeof columnHelper.accessor>[];
-  // Generic types from the gql codegen cause a lot of typing noise when passing this array
-  // into the table component. Using the columnHelper accessor type relieves this
+  const columns = useMemo(() => {
+    return [
+      columnHelper.accessor('name', {
+        header: 'Name',
+      }),
+      columnHelper.accessor('releaseDate', {
+        header: 'Release Date',
+        cell: (ctx) => {
+          return dateFormatter.format(new Date(ctx.getValue()));
+        },
+      }),
+      columnHelper.accessor('artist.name', { header: 'Artist' }),
+      columnHelper.accessor('staticRating', {
+        header: "Mason's Rating",
+        cell: (ctx) => {
+          return <Rating id={ctx.cell.id} value={ctx.getValue()} />;
+        },
+      }),
+      columnHelper.accessor('userRating', {
+        header: 'User Rating',
+        cell: (ctx) => {
+          const uuid = ctx.row.original.uuid;
+          return (
+            <Rating
+              id={ctx.cell.id}
+              value={ctx.getValue()}
+              handleClick={(index) => {
+                setLoadingAlbums((prev) => {
+                  return { ...prev, [uuid]: true };
+                });
+                updateUserRatingMutation({ variables: { data: { uuid, rating: index + 1 } } });
+              }}
+              loading={loadingAlbums[uuid]}
+            />
+          );
+        },
+      }),
+    ] satisfies ReturnType<typeof columnHelper.accessor>[];
+    // Generic types from gql codegen cause a lot of typing noise when passing this array
+    // into the table component. Using the columnHelper accessor type relieves this
+  }, [columnHelper, loadingAlbums, updateUserRatingMutation]);
 
   return (
     <div className="w-full">

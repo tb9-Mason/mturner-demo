@@ -29,6 +29,7 @@ export const Table = <T,>({ data, columns }: TableProps<T>) => {
     state: {
       pagination,
     },
+    autoResetPageIndex: false,
   });
 
   return (
@@ -39,7 +40,7 @@ export const Table = <T,>({ data, columns }: TableProps<T>) => {
             <tr key={hg.id} className="border-b-2">
               {hg.headers.map((h) => (
                 <th key={h.id} className="p-2 text-left">
-                  {h.isPlaceholder ? null : flexRender(h.column.columnDef.header, h.getContext())}
+                  {flexRender(h.column.columnDef.header, h.getContext())}
                 </th>
               ))}
             </tr>
