@@ -1,4 +1,5 @@
 /* eslint-disable */
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -22,8 +23,12 @@ export type Album = {
   artist: Artist;
   createdAt: Scalars['DateTimeISO']['output'];
   name: Scalars['String']['output'];
+  numRatings: Scalars['Float']['output'];
   releaseDate: Scalars['DateTimeISO']['output'];
+  staticRating: Scalars['Float']['output'];
   updatedAt: Scalars['DateTimeISO']['output'];
+  userRating: Scalars['Float']['output'];
+  userRatingTotal: Scalars['Float']['output'];
   uuid: Scalars['ID']['output'];
 };
 
@@ -51,11 +56,11 @@ export type Member = {
 export type Query = {
   __typename?: 'Query';
   album?: Maybe<Album>;
-  albums?: Maybe<Array<Album>>;
+  albums: Array<Album>;
   artist?: Maybe<Artist>;
   artists: Array<Artist>;
   member?: Maybe<Member>;
-  members?: Maybe<Array<Member>>;
+  members: Array<Member>;
 };
 
 
@@ -72,3 +77,17 @@ export type QueryArtistArgs = {
 export type QueryMemberArgs = {
   id: Scalars['String']['input'];
 };
+
+export type AlbumsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type AlbumsQuery = { __typename?: 'Query', albums: Array<{ __typename?: 'Album', name: string, releaseDate: any, uuid: string, staticRating: number, userRating: number, artist: { __typename?: 'Artist', name: string } }> };
+
+export type ArtistsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type ArtistsQuery = { __typename?: 'Query', artists: Array<{ __typename?: 'Artist', uuid: string, name: string, startYear: number, endYear?: number | null }> };
+
+
+export const AlbumsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Albums"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"albums"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"releaseDate"}},{"kind":"Field","name":{"kind":"Name","value":"uuid"}},{"kind":"Field","name":{"kind":"Name","value":"staticRating"}},{"kind":"Field","name":{"kind":"Name","value":"userRating"}},{"kind":"Field","name":{"kind":"Name","value":"artist"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<AlbumsQuery, AlbumsQueryVariables>;
+export const ArtistsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Artists"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"artists"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uuid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"startYear"}},{"kind":"Field","name":{"kind":"Name","value":"endYear"}}]}}]}}]} as unknown as DocumentNode<ArtistsQuery, ArtistsQueryVariables>;

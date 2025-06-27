@@ -12,10 +12,13 @@ export default defineConfig(({ mode }) => {
   const config: CodegenConfig = {
     overwrite: true,
     schema: `${env.VITE_API_HOST}/graphql`,
-    documents: 'src/**/*.tsx',
+    documents: ['src/**/*.tsx', 'src/**/*.queries.ts'],
     generates: {
       'src/gql/': {
         preset: 'client',
+        presetConfig: {
+          gqlTagName: 'gql',
+        },
         plugins: [],
       },
       './graphql.schema.json': {

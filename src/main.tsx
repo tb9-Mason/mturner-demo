@@ -5,6 +5,9 @@ import { Home } from './routes';
 import { Footer, Header } from './common/components';
 import { GqlProvider } from './common/providers';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router';
+import { MusicTable } from './routes/music-table/MusicTable';
+import { preloadQuery } from './common/utilities';
+import { GET_ALBUMS } from './routes/music-table/queries/albums.queries';
 
 const router = createBrowserRouter([
   {
@@ -20,7 +23,16 @@ const router = createBrowserRouter([
         </div>
       </GqlProvider>
     ),
-    children: [{ element: <Home />, index: true }],
+    children: [
+      { element: <Home />, index: true },
+      {
+        path: 'albums',
+        element: <MusicTable />,
+        loader: async () => {
+          return { albums: preloadQuery(GET_ALBUMS, { fetchPolicy: 'network-only' }) };
+        },
+      },
+    ],
   },
 ]);
 
