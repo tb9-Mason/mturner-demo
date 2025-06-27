@@ -14,3 +14,12 @@ export const GET_ALBUMS = gql(`
     }
   }
 `);
+
+export const UPDATE_ALBUM_RATING = gql(`
+  mutation UpdateAlbumRating($data: UpdateUserRatingInput!) {
+    updateUserRating(data: $data) {
+        uuid
+        userRating
+    }
+  }
+`);
