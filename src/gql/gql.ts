@@ -14,12 +14,12 @@ import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/
  * Learn more about it here: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#reducing-bundle-size
  */
 type Documents = {
-    "\n  query Albums {\n    albums {\n        name\n        releaseDate\n        uuid\n        staticRating\n        userRating\n        artist {\n            name\n        }\n    }\n  }\n": typeof types.AlbumsDocument,
+    "\n  query Albums {\n    albums {\n        name\n        releaseDate\n        uuid\n        staticRating\n        userRating\n        link\n        artist {\n            name\n        }\n    }\n  }\n": typeof types.AlbumsDocument,
     "\n  mutation UpdateAlbumRating($data: UpdateUserRatingInput!) {\n    updateUserRating(data: $data) {\n        uuid\n        userRating\n    }\n  }\n": typeof types.UpdateAlbumRatingDocument,
     "\n  query Artists {\n    artists {\n      uuid\n      name\n      startYear\n      endYear\n    }\n  }\n": typeof types.ArtistsDocument,
 };
 const documents: Documents = {
-    "\n  query Albums {\n    albums {\n        name\n        releaseDate\n        uuid\n        staticRating\n        userRating\n        artist {\n            name\n        }\n    }\n  }\n": types.AlbumsDocument,
+    "\n  query Albums {\n    albums {\n        name\n        releaseDate\n        uuid\n        staticRating\n        userRating\n        link\n        artist {\n            name\n        }\n    }\n  }\n": types.AlbumsDocument,
     "\n  mutation UpdateAlbumRating($data: UpdateUserRatingInput!) {\n    updateUserRating(data: $data) {\n        uuid\n        userRating\n    }\n  }\n": types.UpdateAlbumRatingDocument,
     "\n  query Artists {\n    artists {\n      uuid\n      name\n      startYear\n      endYear\n    }\n  }\n": types.ArtistsDocument,
 };
@@ -41,7 +41,7 @@ export function gql(source: string): unknown;
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
-export function gql(source: "\n  query Albums {\n    albums {\n        name\n        releaseDate\n        uuid\n        staticRating\n        userRating\n        artist {\n            name\n        }\n    }\n  }\n"): (typeof documents)["\n  query Albums {\n    albums {\n        name\n        releaseDate\n        uuid\n        staticRating\n        userRating\n        artist {\n            name\n        }\n    }\n  }\n"];
+export function gql(source: "\n  query Albums {\n    albums {\n        name\n        releaseDate\n        uuid\n        staticRating\n        userRating\n        link\n        artist {\n            name\n        }\n    }\n  }\n"): (typeof documents)["\n  query Albums {\n    albums {\n        name\n        releaseDate\n        uuid\n        staticRating\n        userRating\n        link\n        artist {\n            name\n        }\n    }\n  }\n"];
 /**
  * The gql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */

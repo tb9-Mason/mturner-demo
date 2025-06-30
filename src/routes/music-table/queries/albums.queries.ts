@@ -8,6 +8,7 @@ export const GET_ALBUMS = gql(`
         uuid
         staticRating
         userRating
+        link
         artist {
             name
         }

@@ -38,6 +38,13 @@ export const MusicTable = () => {
     return [
       columnHelper.accessor('name', {
         header: 'Name',
+        cell: (ctx) => {
+          return (
+            <a href={ctx.row.original.link} target="_blank" rel="noreferrer">
+              {ctx.getValue()}
+            </a>
+          );
+        },
       }),
       columnHelper.accessor('releaseDate', {
         header: 'Release Date',
@@ -80,7 +87,7 @@ export const MusicTable = () => {
     <div className="w-full">
       <Heading tag="h1">Album Ratings Demo</Heading>
       <div className="mb-4">
-        <p>I've seeded the database with some of my favorite records, including a star rating from 1 to 5.</p>
+        <p>I've seeded the database with some records by my favorite artists, including a star rating from 1 to 5.</p>
         <p>Do you have an opinion on any of these? Feel free to click a star to add your rating!</p>
         <p>
           Backend code for this demo <a href="https://github.com/tb9-Mason/express-api-demo">can be found here.</a>
