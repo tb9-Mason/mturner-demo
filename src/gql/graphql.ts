@@ -22,6 +22,7 @@ export type Album = {
   __typename?: 'Album';
   artist: Artist;
   createdAt: Scalars['DateTimeISO']['output'];
+  link: Scalars['String']['output'];
   name: Scalars['String']['output'];
   numRatings: Scalars['Float']['output'];
   releaseDate: Scalars['DateTimeISO']['output'];
