@@ -45,24 +45,20 @@ export const MusicTable = () => {
             </a>
           );
         },
-        meta: { expand: true },
+        size: 250,
       }),
       columnHelper.accessor('releaseDate', {
         header: 'Release Date',
         cell: (ctx) => {
           return dateFormatter.format(new Date(ctx.getValue()));
         },
-        meta: { shrink: true },
-        size: 135,
       }),
-      columnHelper.accessor('artist.name', { header: 'Artist', meta: { shrink: true }, size: 135 }),
+      columnHelper.accessor('artist.name', { header: 'Artist' }),
       columnHelper.accessor('staticRating', {
         header: "Mason's Rating",
         cell: (ctx) => {
           return <Rating id={ctx.cell.id} value={ctx.getValue()} />;
         },
-        meta: { shrink: true },
-        size: 135,
       }),
       columnHelper.accessor('userRating', {
         header: 'User Rating',
@@ -82,8 +78,6 @@ export const MusicTable = () => {
             />
           );
         },
-        meta: { shrink: true },
-        size: 135,
       }),
     ] satisfies ReturnType<typeof columnHelper.accessor>[];
     // Generic types from gql codegen cause a lot of typing noise when passing this array

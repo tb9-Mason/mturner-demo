@@ -47,36 +47,38 @@ export const Table = <T,>({ data, columns, initialState = {} }: TableProps<T>) =
 
   return (
     <>
-      <table className="border w-full">
-        <thead>
-          {table.getHeaderGroups().map((hg) => (
-            <tr key={hg.id} className="border-b-2">
-              {hg.headers.map((h) => (
-                <th key={h.id} className="p-2 text-left">
-                  <button
-                    className="cursor-pointer flex gap-1 items-center"
-                    onClick={h.column.getToggleSortingHandler()}
-                  >
-                    <span>{flexRender(h.column.columnDef.header, h.getContext())}</span>
-                    <SortIndicator dir={h.column.getIsSorted()} />
-                  </button>
-                </th>
-              ))}
-            </tr>
-          ))}
-        </thead>
-        <tbody>
-          {table.getRowModel().rows.map((r) => (
-            <tr key={r.id} className="border-b">
-              {r.getVisibleCells().map((c) => (
-                <td key={c.id} className="p-2">
-                  {flexRender(c.column.columnDef.cell, c.getContext())}
-                </td>
-              ))}
-            </tr>
-          ))}
-        </tbody>
-      </table>
+      <div className="overflow-x-auto max-w-screen">
+        <table className="border w-full table-fixed">
+          <thead>
+            {table.getHeaderGroups().map((hg) => (
+              <tr key={hg.id} className="border-b-2">
+                {hg.headers.map((h) => (
+                  <th key={h.id} className="p-2 text-left" style={{ width: `${h.column.getSize()}px` }}>
+                    <button
+                      className="cursor-pointer flex gap-1 items-center"
+                      onClick={h.column.getToggleSortingHandler()}
+                    >
+                      <span>{flexRender(h.column.columnDef.header, h.getContext())}</span>
+                      <SortIndicator dir={h.column.getIsSorted()} />
+                    </button>
+                  </th>
+                ))}
+              </tr>
+            ))}
+          </thead>
+          <tbody>
+            {table.getRowModel().rows.map((r) => (
+              <tr key={r.id} className="border-b">
+                {r.getVisibleCells().map((c) => (
+                  <td key={c.id} className="p-2">
+                    {flexRender(c.column.columnDef.cell, c.getContext())}
+                  </td>
+                ))}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
       <TablePagination<T> table={table} />
     </>
   );
@@ -125,6 +127,7 @@ const TablePagination = <T,>({ table }: TablePaginationProps<T>) => {
           </strong>
         </span>
         <select
+          className="hidden sm:block"
           value={table.getState().pagination.pageSize}
           onChange={(e) => {
             table.setPageSize(Number(e.target.value));

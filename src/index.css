@@ -15,15 +15,15 @@
 }
 
 html {
-  @apply h-full;
+  @apply h-full overflow-x-hidden;
 }
 
 body {
-  @apply flex flex-col min-h-full;
+  @apply flex flex-col min-h-full overflow-x-hidden relative;
 }
 
 #root {
-  @apply flex flex-col flex-1 w-full;
+  @apply flex flex-col flex-1;
 }
 
 h1,
