@@ -28,7 +28,7 @@ export const Rating = ({ id, loading, value, handleClick }: RatingProps) => {
         return handleClick ? (
           <button
             key={renderKey}
-            className="cursor-pointer hover:text-amber-400 disabled:opacity-75"
+            className="enabled:cursor-pointer hover:text-amber-400 disabled:opacity-75"
             onClick={() => handleClick(i)}
             disabled={loading}
           >

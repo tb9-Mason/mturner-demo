@@ -105,12 +105,16 @@ const TablePagination = <T,>({ table }: TablePaginationProps<T>) => {
   return (
     <div className="flex items-center justify-between gap-2 py-2">
       <div className="flex gap-2">
-        <button className="border rounded p-1" onClick={() => table.firstPage()} disabled={!table.getCanPreviousPage()}>
+        <button
+          className="border rounded p-1 enabled:cursor-pointer disabled:opacity-75"
+          onClick={() => table.firstPage()}
+          disabled={!table.getCanPreviousPage()}
+        >
           <ChevronDoubleLeftIcon className="size-5" />
           <span className="sr-only">First Page</span>
         </button>
         <button
-          className="border rounded p-1"
+          className="border rounded p-1 enabled:cursor-pointer disabled:opacity-75"
           onClick={() => table.previousPage()}
           disabled={!table.getCanPreviousPage()}
         >
@@ -140,11 +144,19 @@ const TablePagination = <T,>({ table }: TablePaginationProps<T>) => {
         </select>
       </div>
       <div className="flex gap-2">
-        <button className="border rounded p-1" onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
+        <button
+          className="border rounded p-1 enabled:cursor-pointer disabled:opacity-75"
+          onClick={() => table.nextPage()}
+          disabled={!table.getCanNextPage()}
+        >
           <ChevronRightIcon className="size-5" />
           <span className="sr-only">Next Page</span>
         </button>
-        <button className="border rounded p-1" onClick={() => table.lastPage()} disabled={!table.getCanNextPage()}>
+        <button
+          className="border rounded p-1 enabled:cursor-pointer disabled:opacity-75"
+          onClick={() => table.lastPage()}
+          disabled={!table.getCanNextPage()}
+        >
           <ChevronDoubleRightIcon className="size-5" />
           <span className="sr-only">Last Page</span>
         </button>
