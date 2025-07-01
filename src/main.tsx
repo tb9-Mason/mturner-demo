@@ -8,12 +8,14 @@ import { createBrowserRouter, Outlet, RouterProvider } from 'react-router';
 import { MusicTable } from './routes/music-table/MusicTable';
 import { preloadQuery } from './common/utilities';
 import { GET_ALBUMS } from './routes/music-table/queries/albums.queries';
+import { ToastContainer } from 'react-toastify';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: (
       <GqlProvider>
+        <ToastContainer />
         <div className="flex flex-col min-h-screen">
           <Header />
           <div className="flex w-full flex-1 max-w-screen-xl mx-auto px-6">

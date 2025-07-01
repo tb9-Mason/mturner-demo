@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { useLoaderData } from 'react-router';
 import { useMutation, useReadQuery } from '@apollo/client';
 import { createColumnHelper } from '@tanstack/react-table';
@@ -15,24 +15,38 @@ export const MusicTable = () => {
   const [albums, setAlbums] = useState(data.albums);
   const [loadingAlbums, setLoadingAlbums] = useState<Record<string, boolean>>({});
 
-  // TODO: add error logic
-  const [updateUserRatingMutation, { data: userRatingData }] = useMutation(UPDATE_ALBUM_RATING);
+  const [updateUserRatingMutation] = useMutation(UPDATE_ALBUM_RATING);
   const columnHelper = createColumnHelper<AlbumsQuery['albums'][0]>();
 
-  useEffect(() => {
-    if (userRatingData) {
-      const {
-        updateUserRating: { uuid, userRating },
-      } = userRatingData;
+  const handleUpdateRating = useCallback(
+    async (uuid: string, rating: number) => {
+      setLoadingAlbums((prev) => ({ ...prev, [uuid]: true }));
 
-      setAlbums((prev) => {
-        return prev.map((item) => (item.uuid === uuid ? { ...item, userRating } : item));
-      });
-      setLoadingAlbums((prev) => {
-        return { ...prev, [uuid]: false };
-      });
-    }
-  }, [userRatingData]);
+      try {
+        // Parse the response directly instead of handling with separate data and error useEffects
+        // Allows scoping "loading" data to a single row instead of being global
+        const response = await updateUserRatingMutation({
+          variables: { data: { uuid, rating } },
+        });
+
+        if (response.data?.updateUserRating.userRating) {
+          const {
+            data: {
+              updateUserRating: { userRating },
+            },
+          } = response;
+          setAlbums((prev) => {
+            return prev.map((item) => (item.uuid === uuid ? { ...item, userRating } : item));
+          });
+        }
+      } catch {
+        // This error is caught by the client errorLink
+      } finally {
+        setLoadingAlbums((prev) => ({ ...prev, [uuid]: false }));
+      }
+    },
+    [updateUserRatingMutation],
+  );
 
   const columns = useMemo(() => {
     return [
@@ -69,10 +83,7 @@ export const MusicTable = () => {
               id={ctx.cell.id}
               value={ctx.getValue()}
               handleClick={(index) => {
-                setLoadingAlbums((prev) => {
-                  return { ...prev, [uuid]: true };
-                });
-                updateUserRatingMutation({ variables: { data: { uuid, rating: index + 1 } } });
+                handleUpdateRating(uuid, index + 1);
               }}
               loading={loadingAlbums[uuid]}
             />
@@ -82,7 +93,7 @@ export const MusicTable = () => {
     ] satisfies ReturnType<typeof columnHelper.accessor>[];
     // Generic types from gql codegen cause a lot of typing noise when passing this array
     // into the table component. Using the columnHelper accessor type relieves this
-  }, [columnHelper, loadingAlbums, updateUserRatingMutation]);
+  }, [columnHelper, handleUpdateRating, loadingAlbums]);
 
   return (
     <div className="w-full">

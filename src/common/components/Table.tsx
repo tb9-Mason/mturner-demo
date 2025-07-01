@@ -89,7 +89,6 @@ interface SortIndicatorProps {
 }
 
 const SortIndicator = ({ dir }: SortIndicatorProps) => {
-  console.log(dir, 'dir');
   if (dir === 'asc') {
     return <ArrowUpIcon className="size-3" />;
   } else if (dir === 'desc') {
