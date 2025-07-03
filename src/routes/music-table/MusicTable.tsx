@@ -1,17 +1,20 @@
-import { useCallback, useMemo, useState } from 'react';
+import { Suspense, useCallback, useMemo, useState } from 'react';
 import { useLoaderData } from 'react-router';
-import { useMutation, useReadQuery } from '@apollo/client';
+import { QueryRef, useMutation, useReadQuery } from '@apollo/client';
 import { createColumnHelper } from '@tanstack/react-table';
 import { AlbumsQuery } from '../../gql/graphql';
 import { dateFormatter } from '../../common/utilities';
-import { Heading, Table } from '../../common/components';
+import { Heading, RouteLoadingIndicator, Table } from '../../common/components';
 import { UPDATE_ALBUM_RATING } from './queries/albums.queries';
 import { Rating } from './components';
 
-export const MusicTable = () => {
-  // Get the prefetched query from the route loader and set in state
-  const { albums: albumsQueryRef } = useLoaderData();
-  const { data } = useReadQuery<AlbumsQuery>(albumsQueryRef);
+interface MusicTableProps {
+  queryRef: QueryRef<AlbumsQuery>;
+}
+
+const MusicTable = ({ queryRef }: MusicTableProps) => {
+  // Read the query ref and set in state
+  const { data } = useReadQuery<AlbumsQuery>(queryRef);
   const [albums, setAlbums] = useState(data.albums);
   const [loadingAlbums, setLoadingAlbums] = useState<Record<string, boolean>>({});
 
@@ -113,5 +116,16 @@ export const MusicTable = () => {
         />
       </div>
     </div>
+  );
+};
+
+// Use a wrapper to allow the queryRef to trigger suspense behavior
+export const MusicTableWrapper = () => {
+  // Get the prefetched query from the route loader
+  const queryRef = useLoaderData();
+  return (
+    <Suspense fallback={<RouteLoadingIndicator />}>
+      <MusicTable queryRef={queryRef} />
+    </Suspense>
   );
 };
