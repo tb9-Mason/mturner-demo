@@ -16,11 +16,11 @@ export const RouteLoadingIndicator = () => {
 
   // Gets a random index for a given length, avoiding the last set index
   const getRandomIndex = (exclude: number, length: number) => {
-    let idx = exclude;
-    while (idx === exclude && length > 1) {
-      idx = Math.floor(Math.random() * length);
+    let index = exclude;
+    while (index === exclude && length > 1) {
+      index = Math.floor(Math.random() * length);
     }
-    return idx;
+    return index;
   };
 
   // Randomize loading messages. These eco dynos can take a while to spin up
