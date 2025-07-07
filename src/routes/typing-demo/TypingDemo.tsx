@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
-import { Heading } from '../../common/components';
+import { Button, Heading, Input, Select } from '../../common/components';
 import { words, WordsByDifficulty } from './typing-data';
 
 const GRID_MAX = 100;
@@ -24,12 +24,12 @@ export const TypingDemo = () => {
   const [gameState, setGameState] = useState<GameState>({ currentState: 'clean', score: 0, timeRemaining: 0 });
   const [inputValue, setInputValue] = useState('');
   const [correctCount, setCorrectCount] = useState(0);
-  const inputRef = useRef<HTMLInputElement>(null);
-
   const [currentWordIndex, setCurrentWordIndex] = useState<{
     difficulty: keyof WordsByDifficulty;
     index: number;
   }>({ difficulty: 'easy', index: Math.floor(Math.random() * words.easy.length) });
+
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const getRandomWordIndex = useCallback(
     (difficulty: keyof WordsByDifficulty) => {
@@ -133,7 +133,7 @@ export const TypingDemo = () => {
           </a>
         </p>
       </div>
-      <div className="flex flex-col items-center mb-4 relative">
+      <div className="flex flex-col items-center mb-4 relative py-4 max-w-2xl mx-auto">
         {gameState.currentState !== 'started' && (
           <StartEndGameOverlay gameState={gameState} onGameStart={handleStartGame} />
         )}
@@ -155,7 +155,7 @@ export const TypingDemo = () => {
           />
         </div>
         <div className="text-center">
-          <input
+          <Input
             type="text"
             ref={inputRef}
             value={inputValue}
@@ -235,24 +235,27 @@ interface StartEndGameOverlayProps {
 const StartEndGameOverlay = ({ gameState, onGameStart }: StartEndGameOverlayProps) => {
   const [timeOption, setTimeOption] = useState(TIME_OPTIONS_SEC[1]);
   return (
-    <div className="absolute inset-0 flex flex-col items-center justify-center z-10 backdrop-blur-sm">
-      <h2>THE TYPING OF THE DEMO</h2>
+    <div className="absolute inset-0 flex flex-col items-center justify-center z-10 bg-black/90">
+      <h2 className="mb-4">THE TYPING OF THE DEMO</h2>
       {gameState.currentState === 'completed' && (
-        <div>
-          Final Score:
-          <h2>{gameState.score}</h2>
+        <div className="flex flex-col items-center gap-2 mb-4">
+          <span className="font-bold text-xl">Final Score</span>
+          <span className="font-bold text-4xl">{gameState.score}</span>
+          <span>Play again?</span>
         </div>
       )}
-      <select onChange={(e) => setTimeOption(parseInt(e.target.value))}>
-        {TIME_OPTIONS_SEC.map((x) => (
-          <option value={x} key={`time-option-${x}`}>
-            {x} sec.
-          </option>
-        ))}
-      </select>
-      <button autoFocus onClick={() => onGameStart(timeOption)}>
+      <div className="min-w-36">
+        <Select className="mb-4" onChange={(e) => setTimeOption(parseInt(e.target.value))}>
+          {TIME_OPTIONS_SEC.map((x) => (
+            <option value={x} key={`time-option-${x}`}>
+              {x} sec.
+            </option>
+          ))}
+        </Select>
+      </div>
+      <Button autoFocus type="button" onClick={() => onGameStart(timeOption)}>
         Start Game
-      </button>
+      </Button>
     </div>
   );
 };
