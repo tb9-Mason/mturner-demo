@@ -32,7 +32,7 @@ export const RouteLoadingIndicator = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center  z-10 backdrop-blur-sm min-h-screen w-full">
+    <div className="fixed inset-0 flex items-center justify-center z-10 backdrop-blur-sm min-h-screen w-full">
       <div className="flex flex-col items-center gap-4">
         <ArrowPathIcon className="size-12 animate-spin" />
         <pre className="whitespace-pre text-sm">{LOADING_MESSAGES[messageIndex]}</pre>

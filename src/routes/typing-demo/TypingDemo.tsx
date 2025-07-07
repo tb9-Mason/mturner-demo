@@ -1,15 +1,30 @@
-import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import { Heading } from '../../common/components';
 import { words, WordsByDifficulty } from './typing-data';
 
 const GRID_MAX = 100;
+const DEFAULT_COMPLETED_WORDS = { easy: {}, medium: {}, hard: {} };
+const TIME_OPTIONS_SEC = [60, 90, 120];
+const SCORE_BY_DIFFICULTY = {
+  easy: 5,
+  medium: 10,
+  hard: 20,
+};
+
+interface GameState {
+  currentState: 'clean' | 'started' | 'completed';
+  score: number;
+  timeRemaining: number;
+}
 
 export const TypingDemo = () => {
   const [completedWords, setCompletedWords] = useState<{
     [key in keyof WordsByDifficulty]: Record<number, boolean>;
-  }>({ easy: {}, medium: {}, hard: {} });
+  }>(DEFAULT_COMPLETED_WORDS);
+  const [gameState, setGameState] = useState<GameState>({ currentState: 'clean', score: 0, timeRemaining: 0 });
   const [inputValue, setInputValue] = useState('');
   const [correctCount, setCorrectCount] = useState(0);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   const [currentWordIndex, setCurrentWordIndex] = useState<{
     difficulty: keyof WordsByDifficulty;
@@ -38,28 +53,73 @@ export const TypingDemo = () => {
       setCurrentWordIndex(() => ({ difficulty: 'medium', index: getRandomWordIndex('medium') }));
     } else if (correctCount === 66) {
       setCurrentWordIndex(() => ({ difficulty: 'hard', index: getRandomWordIndex('hard') }));
+    } else if (correctCount === 100) {
+      // If the player has reached 100 phrases, the game is over
+      setGameState((prev) => ({ ...prev, currentState: 'completed', timeRemaining: 0 }));
     } else {
       setCurrentWordIndex((prev) => ({ ...prev, index: getRandomWordIndex(prev.difficulty) }));
     }
   }, [correctCount, getRandomWordIndex]);
 
+  useEffect(() => {
+    let timeInterval: NodeJS.Timeout;
+    if (gameState.currentState === 'started') {
+      timeInterval = setInterval(() => {
+        setGameState((prev) => {
+          if (prev.timeRemaining <= 0) {
+            clearInterval(timeInterval);
+            // When the timer runs out, the game is over
+            return { ...prev, timeRemaining: 0, currentState: 'completed' };
+          }
+          return { ...prev, timeRemaining: prev.timeRemaining - 1 };
+        });
+      }, 1000);
+    }
+
+    return () => clearInterval(timeInterval);
+  }, [gameState.currentState]);
+
+  useEffect(() => {
+    if (gameState.currentState === 'started' && inputRef.current) {
+      inputRef.current.focus();
+    }
+  }, [gameState.currentState]);
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setInputValue(e.target.value);
   };
 
-  const handleInputKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
-    const { difficulty, index } = currentWordIndex;
-    // On enter press, check that the downcased strings match
-    if (e.key === 'Enter' && inputValue.trim().toLowerCase() === words[difficulty][index].toLowerCase()) {
-      // Clear the input
-      setInputValue('');
-      // Set the word at the current index and difficulty as being completed
-      setCompletedWords((prev) => {
-        return { ...prev, [difficulty]: { ...prev[difficulty], [index]: true } };
-      });
-      // increment the correct counter without going over the grid max
-      setCorrectCount((prev) => Math.min(prev + 1, GRID_MAX));
-    }
+  const handleInputKeyDown = useCallback(
+    (e: React.KeyboardEvent<HTMLInputElement>) => {
+      const { difficulty, index } = currentWordIndex;
+      // On enter press, check that the downcased strings match
+      if (e.key === 'Enter' && inputValue.trim().toLowerCase() === words[difficulty][index].toLowerCase()) {
+        // Clear the input
+        setInputValue('');
+        // Set the word at the current index and difficulty as being completed
+        setCompletedWords((prev) => {
+          // Note that this score update will happen twice in development due to strict mode
+          setGameState((prevState) => {
+            return { ...prevState, score: prevState.score + SCORE_BY_DIFFICULTY[difficulty] };
+          });
+          return { ...prev, [difficulty]: { ...prev[difficulty], [index]: true } };
+        });
+        // increment the correct counter without going over the grid max
+        setCorrectCount((prev) => Math.min(prev + 1, GRID_MAX));
+      }
+    },
+    [currentWordIndex, inputValue],
+  );
+
+  const handleStartGame = (time: number) => {
+    setCorrectCount(0);
+    setGameState({
+      currentState: 'started',
+      timeRemaining: time,
+      score: 0,
+    });
+    setInputValue('');
+    setCompletedWords(DEFAULT_COMPLETED_WORDS);
   };
 
   return (
@@ -74,7 +134,20 @@ export const TypingDemo = () => {
         </p>
       </div>
       <div className="flex flex-col items-center mb-4 relative">
-        <ScoreGrid correctCount={correctCount} />
+        {gameState.currentState !== 'started' && (
+          <StartEndGameOverlay gameState={gameState} onGameStart={handleStartGame} />
+        )}
+        <div>
+          <div className="flex w-full justify-between">
+            <div>
+              Time Left: <span className="font-bold">{gameState.timeRemaining}</span>
+            </div>
+            <div>
+              Score: <span className="font-bold">{gameState.score}</span>
+            </div>
+          </div>
+          <ScoreGrid correctCount={correctCount} />
+        </div>
         <div className="mb-4 text-center">
           <WordDisplay
             currentInput={inputValue}
@@ -84,11 +157,12 @@ export const TypingDemo = () => {
         <div className="text-center">
           <input
             type="text"
+            ref={inputRef}
             value={inputValue}
             onChange={handleInputChange}
             onKeyDown={handleInputKeyDown}
+            disabled={gameState.currentState !== 'started'}
             className="border px-2 py-1"
-            autoFocus
           />
         </div>
       </div>
@@ -106,7 +180,7 @@ const ScoreGrid = ({ correctCount }: ScoreGridProps) => {
       {Array.from({ length: GRID_MAX }).map((_, i) => (
         <div
           key={`grid-${i}`}
-          className="size-5 border border-gray-400"
+          className={`size-5 border border-gray-400 ${i < correctCount ? 'animate-ping-once' : ''}`}
           style={{
             background: i < correctCount ? 'white' : 'transparent',
           }}
@@ -143,11 +217,42 @@ const WordDisplay = ({ currentWord, currentInput }: WordAreaProps) => {
     <span className={`font-bold text-lg block ${hasError ? 'animate-shake' : ''}`}>
       {characterArray.map((l, i) => (
         <span
+          key={`char-${l}-${i}`}
           className={`${i < matchIndex ? '!text-green-300' : ''} ${hasError && i < currentInput.length ? 'text-red-400' : ''}`}
         >
           {l}
         </span>
       ))}
     </span>
+  );
+};
+
+interface StartEndGameOverlayProps {
+  onGameStart: (time: number) => void;
+  gameState: GameState;
+}
+
+const StartEndGameOverlay = ({ gameState, onGameStart }: StartEndGameOverlayProps) => {
+  const [timeOption, setTimeOption] = useState(TIME_OPTIONS_SEC[1]);
+  return (
+    <div className="absolute inset-0 flex flex-col items-center justify-center z-10 backdrop-blur-sm">
+      <h2>THE TYPING OF THE DEMO</h2>
+      {gameState.currentState === 'completed' && (
+        <div>
+          Final Score:
+          <h2>{gameState.score}</h2>
+        </div>
+      )}
+      <select onChange={(e) => setTimeOption(parseInt(e.target.value))}>
+        {TIME_OPTIONS_SEC.map((x) => (
+          <option value={x} key={`time-option-${x}`}>
+            {x} sec.
+          </option>
+        ))}
+      </select>
+      <button autoFocus onClick={() => onGameStart(timeOption)}>
+        Start Game
+      </button>
+    </div>
   );
 };
