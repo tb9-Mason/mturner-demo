@@ -8,6 +8,7 @@ import { MusicTableWrapper } from './routes/music-table/MusicTable';
 import { preloadQuery } from './common/utilities';
 import { GET_ALBUMS } from './routes/music-table/queries/albums.queries';
 import { AppLayout } from './common/components';
+import { TypingDemo } from './routes/typing-demo/TypingDemo';
 
 const router = createBrowserRouter([
   {
@@ -25,6 +26,10 @@ const router = createBrowserRouter([
         loader: async () => {
           return preloadQuery(GET_ALBUMS, { fetchPolicy: 'network-only' });
         },
+      },
+      {
+        path: 'totd',
+        element: <TypingDemo />,
       },
     ],
   },

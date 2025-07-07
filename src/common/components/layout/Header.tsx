@@ -10,6 +10,9 @@ export const Header = () => {
         <li>
           <Link to="albums">Albums</Link>
         </li>
+        <li>
+          <Link to="totd">Typing</Link>
+        </li>
       </ul>
     </header>
   );

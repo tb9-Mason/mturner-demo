@@ -16,11 +16,11 @@ export const RouteLoadingIndicator = () => {
 
   // Gets a random index for a given length, avoiding the last set index
   const getRandomIndex = (exclude: number, length: number) => {
-    let idx = exclude;
-    while (idx === exclude && length > 1) {
-      idx = Math.floor(Math.random() * length);
+    let index = exclude;
+    while (index === exclude && length > 1) {
+      index = Math.floor(Math.random() * length);
     }
-    return idx;
+    return index;
   };
 
   // Randomize loading messages. These eco dynos can take a while to spin up
@@ -32,7 +32,7 @@ export const RouteLoadingIndicator = () => {
   }, []);
 
   return (
-    <div className="fixed inset-0 flex items-center justify-center  z-10 backdrop-blur-sm min-h-screen w-full">
+    <div className="fixed inset-0 flex items-center justify-center z-10 backdrop-blur-sm min-h-screen w-full">
       <div className="flex flex-col items-center gap-4">
         <ArrowPathIcon className="size-12 animate-spin" />
         <pre className="whitespace-pre text-sm">{LOADING_MESSAGES[messageIndex]}</pre>
