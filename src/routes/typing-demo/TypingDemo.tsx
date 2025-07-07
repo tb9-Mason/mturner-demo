@@ -123,10 +123,26 @@ export const TypingDemo = () => {
       <Heading tag="h1">The Typing of the Demo</Heading>
       <div className="mb-4">
         <p>
+          Inspired by the incredible and bizarre SEGA typing game, "The Typing of the Dead", released in 1999 to
+          Japanese arcades, getting a US release for the Dreamcast in 2001.
+        </p>
+        <p>
+          Half of the fun of this game is just being surprised by the insane phrases that you're prompted with, so I
+          wanted to do a small recreation of that part of the game.
+        </p>
+        <p>
           Phrases sourced from{' '}
           <a href="https://jonathansoma.com/projects/typing-of-the-dead/" target="_blank" rel="noreferrer">
             Jonathan Soma's amazing Typing of the Dead phrase list.
-          </a>
+          </a>{' '}
+        </p>
+        <p>
+          I've pared the list down, as some of the phrases in this 1990's game may not be suitable for everyone. That
+          being said, let me know if you find another questionable phrase in the game.
+        </p>
+        <p>
+          Inputs are not case-sensitive, and the difficulty ramps up at 33 and 66 completions. It should go without
+          saying, but this is best played on a keyboard.
         </p>
       </div>
       <div className="flex flex-col items-center mb-4 relative py-4 max-w-2xl mx-auto">
