@@ -116,6 +116,7 @@ export const TypingDemo = () => {
     });
     setInputValue('');
     setCompletedWords(DEFAULT_COMPLETED_WORDS);
+    setCurrentWordIndex(() => ({ difficulty: 'easy', index: getRandomWordIndex('easy') }));
   };
 
   return (
