@@ -182,7 +182,6 @@ export const words: WordsByDifficulty = {
     'Chopin',
     'Egg head',
     'Fledgling',
-    'Handicrap',
     'Left field',
     'Oolong tea',
     'Rock trout',

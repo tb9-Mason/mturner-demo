@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Heading } from '../../common/components';
 import { words, WordsByDifficulty } from './typing-data';
 
@@ -73,10 +73,13 @@ export const TypingDemo = () => {
           </a>
         </p>
       </div>
-      <div className="flex flex-col items-center mb-4">
+      <div className="flex flex-col items-center mb-4 relative">
         <ScoreGrid correctCount={correctCount} />
         <div className="mb-4 text-center">
-          <span className="font-bold text-lg">{words[currentWordIndex.difficulty][currentWordIndex.index]}</span>
+          <WordDisplay
+            currentInput={inputValue}
+            currentWord={words[currentWordIndex.difficulty][currentWordIndex.index]}
+          />
         </div>
         <div className="text-center">
           <input
@@ -110,5 +113,41 @@ const ScoreGrid = ({ correctCount }: ScoreGridProps) => {
         />
       ))}
     </div>
+  );
+};
+
+interface WordAreaProps {
+  currentWord: string;
+  currentInput: string;
+}
+
+const WordDisplay = ({ currentWord, currentInput }: WordAreaProps) => {
+  const characterArray = currentWord.split('');
+  // Get the length of the string that has been correctly typed thus far
+  const matchIndex = useMemo(() => {
+    const minLength = Math.min(currentWord.length, currentInput.length);
+    let i = 0;
+    while (i < minLength && currentInput[i].toLowerCase() === currentWord[i].toLowerCase()) {
+      i++;
+    }
+    return i;
+  }, [currentInput, currentWord]);
+
+  const hasError = useMemo(() => {
+    // Set a boolean when the input is longer than the current match index
+    return currentInput.length > 0 && currentInput.length > matchIndex;
+  }, [currentInput, matchIndex]);
+
+  // Split the current word into spans, highlight correct and incorrect letters
+  return (
+    <span className={`font-bold text-lg block ${hasError ? 'animate-shake' : ''}`}>
+      {characterArray.map((l, i) => (
+        <span
+          className={`${i < matchIndex ? '!text-green-300' : ''} ${hasError && i < currentInput.length ? 'text-red-400' : ''}`}
+        >
+          {l}
+        </span>
+      ))}
+    </span>
   );
 };
