@@ -1,5 +1,5 @@
 import { useCallback, useEffect, useRef, useState } from 'react';
-import { Heading, Input } from '../../common/components';
+import { Heading, Input, ChipList } from '../../common/components';
 import { words, WordsByDifficulty } from './typing-data';
 import { GameState } from './interfaces';
 import { ScoreGrid, StartEndGameOverlay, WordDisplay } from './components';
@@ -12,6 +12,8 @@ const SCORE_BY_DIFFICULTY = {
   medium: 10,
   hard: 20,
 };
+
+const TECHNOLOGIES = ['React.js', 'TypeScript', 'Tailwind', 'HeadlessUI'];
 
 export const TypingDemo = () => {
   const [completedWords, setCompletedWords] = useState<{
@@ -121,8 +123,11 @@ export const TypingDemo = () => {
 
   return (
     <div className="w-full">
-      <Heading tag="h1">The Typing of the Demo</Heading>
-      <div className="mb-4">
+      <Heading tag="h1" className="mb-2">
+        The Typing of the Demo
+      </Heading>
+      <ChipList list={TECHNOLOGIES} />
+      <div className="mt-2 mb-4">
         <p>
           Inspired by the incredible and bizarre SEGA typing game, "The Typing of the Dead", released in 1999 to
           Japanese arcades, getting a US release for the Dreamcast in 2001.

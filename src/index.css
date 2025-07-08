@@ -91,3 +91,9 @@ a {
     }
   }
 }
+
+@layer components {
+  .chip {
+    @apply rounded-full border px-2 text-sm font-bold;
+  }
+}

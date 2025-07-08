@@ -4,13 +4,15 @@ import { QueryRef, useMutation, useReadQuery } from '@apollo/client';
 import { createColumnHelper } from '@tanstack/react-table';
 import { AlbumsQuery } from '../../gql/graphql';
 import { dateFormatter } from '../../common/utilities';
-import { Heading, RouteLoadingIndicator, Table } from '../../common/components';
+import { Heading, RouteLoadingIndicator, Table, ChipList } from '../../common/components';
 import { UPDATE_ALBUM_RATING } from './queries/albums.queries';
 import { Rating } from './components';
 
 interface MusicTableProps {
   queryRef: QueryRef<AlbumsQuery>;
 }
+
+const TECHNOLOGIES = ['React.js', 'TypeScript', 'Node/Express', 'GraphQL', 'Tailwind', 'HeadlessUI', 'Tanstack Table'];
 
 const MusicTable = ({ queryRef }: MusicTableProps) => {
   // Read the query ref and set in state
@@ -100,8 +102,11 @@ const MusicTable = ({ queryRef }: MusicTableProps) => {
 
   return (
     <div className="w-full">
-      <Heading tag="h1">Album Ratings Demo</Heading>
-      <div className="mb-4">
+      <Heading tag="h1" className="mb-2">
+        Album Ratings Demo
+      </Heading>
+      <ChipList list={TECHNOLOGIES} />
+      <div className="mb-4 mt-2">
         <p>I've seeded the database with some records by my favorite artists, including a star rating from 1 to 5.</p>
         <p>Do you have an opinion on any of these? Feel free to click a star to add your rating!</p>
         <p>

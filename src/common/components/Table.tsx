@@ -18,6 +18,7 @@ import {
   ChevronRightIcon,
   ChevronDoubleRightIcon,
 } from '@heroicons/react/16/solid';
+import { Button } from './interactivity';
 
 interface TableProps<T> {
   data: Array<T>;
@@ -105,22 +106,14 @@ const TablePagination = <T,>({ table }: TablePaginationProps<T>) => {
   return (
     <div className="flex items-center justify-between gap-2 py-2">
       <div className="flex gap-2">
-        <button
-          className="border rounded p-1 enabled:cursor-pointer disabled:opacity-75"
-          onClick={() => table.firstPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
+        <Button onClick={() => table.firstPage()} disabled={!table.getCanPreviousPage()}>
           <ChevronDoubleLeftIcon className="size-5" />
           <span className="sr-only">First Page</span>
-        </button>
-        <button
-          className="border rounded p-1 enabled:cursor-pointer disabled:opacity-75"
-          onClick={() => table.previousPage()}
-          disabled={!table.getCanPreviousPage()}
-        >
+        </Button>
+        <Button onClick={() => table.previousPage()} disabled={!table.getCanPreviousPage()}>
           <ChevronLeftIcon className="size-5" />
           <span className="sr-only">Previous Page</span>
-        </button>
+        </Button>
       </div>
       <div className="flex gap-2">
         <span className="flex items-center gap-1">
@@ -144,22 +137,14 @@ const TablePagination = <T,>({ table }: TablePaginationProps<T>) => {
         </select>
       </div>
       <div className="flex gap-2">
-        <button
-          className="border rounded p-1 enabled:cursor-pointer disabled:opacity-75"
-          onClick={() => table.nextPage()}
-          disabled={!table.getCanNextPage()}
-        >
+        <Button onClick={() => table.nextPage()} disabled={!table.getCanNextPage()}>
           <ChevronRightIcon className="size-5" />
           <span className="sr-only">Next Page</span>
-        </button>
-        <button
-          className="border rounded p-1 enabled:cursor-pointer disabled:opacity-75"
-          onClick={() => table.lastPage()}
-          disabled={!table.getCanNextPage()}
-        >
+        </Button>
+        <Button onClick={() => table.lastPage()} disabled={!table.getCanNextPage()}>
           <ChevronDoubleRightIcon className="size-5" />
           <span className="sr-only">Last Page</span>
-        </button>
+        </Button>
       </div>
     </div>
   );
