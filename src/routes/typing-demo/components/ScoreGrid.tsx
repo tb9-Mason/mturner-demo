@@ -1,7 +1,7 @@
 import { GRID_MAX } from '../constants';
 import { GameState } from '../interfaces';
 
-interface ScoreGridProps {
+export interface ScoreGridProps {
   correctCount: number;
   gameState: GameState;
 }
@@ -22,10 +22,7 @@ export const ScoreGrid = ({ correctCount, gameState }: ScoreGridProps) => {
         {Array.from({ length: GRID_MAX }).map((_, i) => (
           <div
             key={`grid-${i}`}
-            className={`size-5 border border-gray-400 ${i < correctCount ? 'animate-ping-once' : ''}`}
-            style={{
-              background: i < correctCount ? 'white' : 'transparent',
-            }}
+            className={`size-5 border border-gray-400 ${i < correctCount ? 'animate-ping-once bg-white' : 'bg-transparent'}`}
           />
         ))}
       </div>
