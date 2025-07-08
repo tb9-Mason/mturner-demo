@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { GameState } from '../interfaces';
 import { Button, Select } from '../../../common/components';
 
-interface StartEndGameOverlayProps {
+export interface StartEndGameOverlayProps {
   onGameStart: (time: number) => void;
   gameState: GameState;
 }

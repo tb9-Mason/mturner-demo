@@ -30,5 +30,12 @@ export default defineConfig(({ mode }) => {
 
   return {
     plugins: [react(), tailwindcss(), codegen({ config, runOnBuild: !CI_BUILD })],
+    test: {
+      globals: true,
+      include: ['src/**/*.test.tsx'],
+      parallel: true,
+      environment: 'jsdom',
+      setupFiles: ['./vitest.setup.ts'],
+    },
   };
 });

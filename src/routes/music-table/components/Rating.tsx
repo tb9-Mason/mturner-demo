@@ -1,7 +1,7 @@
 import { StarIcon } from '@heroicons/react/24/solid';
 import { StarIcon as UnfilledStarIcon } from '@heroicons/react/24/outline';
 
-interface RatingProps {
+export interface RatingProps {
   id: string;
   loading?: boolean;
   value: number;
