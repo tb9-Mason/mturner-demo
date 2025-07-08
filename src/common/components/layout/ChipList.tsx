@@ -4,7 +4,7 @@ interface ChipListProps {
 
 export const ChipList = ({ list }: ChipListProps) => {
   return (
-    <div className="flex gap-2">
+    <div className="flex flex-wrap gap-2">
       {list.map((item) => (
         <div className="chip">{item}</div>
       ))}
