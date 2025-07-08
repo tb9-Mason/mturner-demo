@@ -5,8 +5,10 @@ interface ChipListProps {
 export const ChipList = ({ list }: ChipListProps) => {
   return (
     <div className="flex flex-wrap gap-2">
-      {list.map((item) => (
-        <div className="chip">{item}</div>
+      {list.map((item, index) => (
+        <div className="chip" key={`chip-${index}-${item}`}>
+          {item}
+        </div>
       ))}
     </div>
   );
