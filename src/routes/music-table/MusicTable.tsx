@@ -95,9 +95,7 @@ const MusicTable = ({ queryRef }: MusicTableProps) => {
           );
         },
       }),
-    ] satisfies ReturnType<typeof columnHelper.accessor>[];
-    // Generic types from gql codegen cause a lot of typing noise when passing this array
-    // into the table component. Using the columnHelper accessor type relieves this
+    ];
   }, [columnHelper, handleUpdateRating, loadingAlbums]);
 
   return (

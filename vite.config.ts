@@ -33,6 +33,16 @@ export default defineConfig(({ mode }) => {
     test: {
       globals: true,
       include: ['src/**/*.test.tsx'],
+      exclude: ['src/gql/**'], // gql codegen
+      coverage: {
+        exclude: [
+          'dist/**', // built files
+          'src/gql/**', // gql codegen
+          '**/*.config.{js,ts}', // config files
+          '**/*.queries.ts', // query files
+          '**/*.d.ts', // type files
+        ],
+      },
       parallel: true,
       environment: 'jsdom',
       setupFiles: ['./vitest.setup.ts'],

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import {
-  AccessorKeyColumnDef,
+  ColumnDef,
   flexRender,
   getCoreRowModel,
   getPaginationRowModel,
@@ -22,7 +22,8 @@ import { Button } from './interactivity';
 
 interface TableProps<T> {
   data: Array<T>;
-  columns: Array<AccessorKeyColumnDef<T>>;
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  columns: Array<ColumnDef<T, any>>; // The union types for Tanstack's table aren't worth the hassle in this small project
   initialState?: InitialTableState;
 }
 
