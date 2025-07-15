@@ -1,10 +1,7 @@
 import { ApolloClient, createQueryPreloader, from, HttpLink, InMemoryCache } from '@apollo/client';
 import { onError } from '@apollo/client/link/error';
 import { toast } from 'react-toastify';
-
-const httpLink = new HttpLink({
-  uri: `${import.meta.env.VITE_API_HOST}/graphql`,
-});
+import { Backend } from '../providers/BackendProvider';
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
   if (graphQLErrors) {
@@ -17,9 +14,11 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
   }
 });
 
-export const gqlClient = new ApolloClient({
-  link: from([errorLink, httpLink]),
-  cache: new InMemoryCache(),
-});
+const baseLink = from([errorLink, new HttpLink({ uri: `${import.meta.env.VITE_API_HOST}/graphql` })]);
+const laravelLink = from([errorLink, new HttpLink({ uri: `${import.meta.env.VITE_API_HOST_LARAVEL}/graphql` })]);
 
-export const preloadQuery = createQueryPreloader(gqlClient);
+export const getClientFor = (backend: Backend) => {
+  return new ApolloClient({ link: backend === 'express' ? baseLink : laravelLink, cache: new InMemoryCache() });
+};
+
+export const createPreloadQueryFor = (backend: Backend) => createQueryPreloader(getClientFor(backend));

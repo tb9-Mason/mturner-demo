@@ -5,18 +5,21 @@ import { Home } from './routes';
 import { GqlProvider } from './common/providers';
 import { createBrowserRouter, RouterProvider } from 'react-router';
 import { MusicTableWrapper } from './routes/music-table/MusicTable';
-import { preloadQuery } from './common/utilities';
+import { createPreloadQueryFor } from './common/utilities';
 import { GET_ALBUMS } from './routes/music-table/queries/albums.queries';
 import { AppLayout } from './common/components';
 import { TypingDemo } from './routes/typing-demo/TypingDemo';
+import { Backend, BackendProvider } from './common/providers/BackendProvider';
 
 const router = createBrowserRouter([
   {
     path: '/',
     element: (
-      <GqlProvider>
-        <AppLayout />
-      </GqlProvider>
+      <BackendProvider>
+        <GqlProvider>
+          <AppLayout />
+        </GqlProvider>
+      </BackendProvider>
     ),
     children: [
       { element: <Home />, index: true },
@@ -24,6 +27,9 @@ const router = createBrowserRouter([
         path: 'albums',
         element: <MusicTableWrapper />,
         loader: async () => {
+          const backend = (localStorage.getItem('backend') as Backend) ?? 'express';
+          // Normally this would be exported from the gql file. For this example, it's being dynamically created
+          const preloadQuery = createPreloadQueryFor(backend);
           return preloadQuery(GET_ALBUMS, { fetchPolicy: 'network-only' });
         },
       },
