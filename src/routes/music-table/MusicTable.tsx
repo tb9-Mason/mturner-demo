@@ -106,10 +106,15 @@ const MusicTable = ({ queryRef }: MusicTableProps) => {
       </Heading>
       <ChipList list={TECHNOLOGIES} />
       <div className="mb-4 mt-2">
-        <p>I've seeded the database with some records by my favorite artists, including a star rating from 1 to 5.</p>
+        <p>
+          I've seeded a shared database with some records by my favorite artists, including a star rating from 1 to 5.
+        </p>
         <p>Do you have an opinion on any of these? Feel free to click a star to add your rating!</p>
         <p>
-          Backend code for this demo <a href="https://github.com/tb9-Mason/express-api-demo">can be found here.</a>
+          Backend code for this demo <a href="https://github.com/tb9-Mason/express-api-demo">can be found here</a> and{' '}
+          <a href="https://github.com/tb9-Mason/laravel-api-demo" target="_blank" rel="noreferrer">
+            here.
+          </a>
         </p>
         <BackendToggle isSupported />
       </div>
