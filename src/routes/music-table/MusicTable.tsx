@@ -1,13 +1,13 @@
-import { Suspense, useCallback, useContext, useMemo, useState } from 'react';
+import { Suspense, useCallback, useMemo, useState } from 'react';
 import { useLoaderData } from 'react-router';
 import { QueryRef, useMutation, useReadQuery } from '@apollo/client';
 import { createColumnHelper } from '@tanstack/react-table';
 import { AlbumsQuery } from '../../gql/graphql';
 import { dateFormatter } from '../../common/utilities';
-import { Heading, RouteLoadingIndicator, Table, ChipList, Button } from '../../common/components';
+import { Heading, RouteLoadingIndicator, Table, ChipList } from '../../common/components';
 import { UPDATE_ALBUM_RATING } from './queries/albums.queries';
 import { Rating } from './components';
-import { BackendContext } from '../../common/providers/BackendProvider';
+import { BackendToggle } from '../../common/components/BackendToggle';
 
 interface MusicTableProps {
   queryRef: QueryRef<AlbumsQuery>;
@@ -18,7 +18,6 @@ const TECHNOLOGIES = ['React.js', 'TypeScript', 'Node/Express', 'GraphQL', 'Tail
 const MusicTable = ({ queryRef }: MusicTableProps) => {
   // Read the query ref and set in state
   const { data } = useReadQuery<AlbumsQuery>(queryRef);
-  const { backend, setBackend } = useContext(BackendContext);
   const [albums, setAlbums] = useState(data.albums);
   const [loadingAlbums, setLoadingAlbums] = useState<Record<string, boolean>>({});
 
@@ -112,9 +111,7 @@ const MusicTable = ({ queryRef }: MusicTableProps) => {
         <p>
           Backend code for this demo <a href="https://github.com/tb9-Mason/express-api-demo">can be found here.</a>
         </p>
-        <Button onClick={() => (backend === 'express' ? setBackend('laravel') : setBackend('express'))}>
-          toggle...
-        </Button>
+        <BackendToggle isSupported />
       </div>
       <div className="w-full">
         <Table<AlbumsQuery['albums'][0]>

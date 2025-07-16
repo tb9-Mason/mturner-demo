@@ -18,13 +18,14 @@ const DEFAULT_BACKEND_CONTEXT: BackendContextValues = {
 export const BackendContext = createContext<BackendContextValues>(DEFAULT_BACKEND_CONTEXT);
 
 export const BackendProvider = ({ children }: PropsWithChildren) => {
-  const [backend, setBackendState] = useState<Backend>(() => {
+  const [backend] = useState<Backend>(() => {
     return (localStorage.getItem(BACKEND_LOCAL_STORAGE_KEY) as Backend) || 'express';
   });
 
   const setBackend = (nextBackend: Backend) => {
     localStorage.setItem(BACKEND_LOCAL_STORAGE_KEY, nextBackend);
-    setBackendState(nextBackend);
+    // Reload the application to demonstrate the route loader using the new backend
+    window.location.reload();
   };
 
   return <BackendContext.Provider value={{ backend, setBackend }}>{children}</BackendContext.Provider>;
