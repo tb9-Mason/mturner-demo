@@ -1,16 +1,15 @@
 import { forwardRef } from 'react';
 import { Select as HuiSelect, SelectProps } from '@headlessui/react';
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
+import clsx from 'clsx';
 
 export const Select = forwardRef<HTMLSelectElement, SelectProps>(
   ({ children, className, ...rest }: SelectProps, ref) => {
+    const defaultClasses =
+      'block w-full appearance-none rounded-lg border bg-white/5 px-3 py-1.5 text-white focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25 *:text-black';
     return (
       <div className="relative">
-        <HuiSelect
-          ref={ref}
-          {...rest}
-          className={`block w-full appearance-none rounded-lg border bg-white/5 px-3 py-1.5 text-white focus:not-data-focus:outline-none data-focus:outline-2 data-focus:-outline-offset-2 data-focus:outline-white/25 *:text-black ${className}`}
-        >
+        <HuiSelect ref={ref} {...rest} className={clsx(defaultClasses, className)}>
           {children}
         </HuiSelect>
         <ChevronDownIcon

@@ -7,6 +7,7 @@ import { dateFormatter } from '../../common/utilities';
 import { Heading, RouteLoadingIndicator, Table, ChipList } from '../../common/components';
 import { UPDATE_ALBUM_RATING } from './queries/albums.queries';
 import { Rating } from './components';
+import { BackendToggle } from '../../common/components/BackendToggle';
 
 interface MusicTableProps {
   queryRef: QueryRef<AlbumsQuery>;
@@ -110,6 +111,7 @@ const MusicTable = ({ queryRef }: MusicTableProps) => {
         <p>
           Backend code for this demo <a href="https://github.com/tb9-Mason/express-api-demo">can be found here.</a>
         </p>
+        <BackendToggle isSupported />
       </div>
       <div className="w-full">
         <Table<AlbumsQuery['albums'][0]>
