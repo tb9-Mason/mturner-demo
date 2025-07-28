@@ -10,6 +10,7 @@ import { GET_ALBUMS } from './routes/music-table/queries/albums.queries';
 import { AppLayout } from './common/components';
 import { TypingDemo } from './routes/typing-demo/TypingDemo';
 import { Backend, BackendProvider } from './common/providers/BackendProvider';
+import { TicTacToe } from './routes/tic-tac-toe/TicTacToe';
 
 const router = createBrowserRouter([
   {
@@ -36,6 +37,10 @@ const router = createBrowserRouter([
       {
         path: 'totd',
         element: <TypingDemo />,
+      },
+      {
+        path: 'ttt',
+        element: <TicTacToe />,
       },
     ],
   },

@@ -13,6 +13,9 @@ export const Header = () => {
         <li>
           <Link to="totd">Typing</Link>
         </li>
+        <li>
+          <Link to="ttt">Tic Tac Toe</Link>
+        </li>
       </ul>
     </header>
   );

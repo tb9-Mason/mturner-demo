@@ -96,4 +96,24 @@ a {
   .chip {
     @apply rounded-full border px-2 text-sm font-bold;
   }
+
+  .game-board {
+    @apply w-80 aspect-square flex flex-col;
+  }
+
+  .game-board .game-row {
+    @apply flex flex-row flex-1;
+  }
+
+  .game-board .game-row:not(:last-of-type) {
+    @apply border-b;
+  }
+
+  .game-board .game-row .game-cell {
+    @apply flex-1 flex items-center justify-center;
+  }
+
+  .game-board .game-row .game-cell:not(:last-of-type) {
+    @apply border-r;
+  }
 }
