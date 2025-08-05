@@ -1,19 +1,19 @@
 import { XMarkIcon, MinusIcon } from '@heroicons/react/24/solid';
 import { CircleIcon } from '@sidekickicons/react/24/outline';
 import { Button } from '../../../common/components';
+import { CellValueEnum } from '../../../gql/graphql';
 
-type CellValue = '' | 'x' | 'o';
-
-type Row = [CellValue, CellValue, CellValue];
+type Row = [CellValueEnum, CellValueEnum, CellValueEnum];
 
 export type Board = [Row, Row, Row];
 
 export interface GameBoardProps {
   state: Board;
+  isDisabled: boolean;
   onSelectCell: (index: CellIndex) => void;
 }
 
-export const GameBoard = ({ state, onSelectCell }: GameBoardProps) => {
+export const GameBoard = ({ isDisabled, state, onSelectCell }: GameBoardProps) => {
   return (
     <div className="game-board">
       {state.map((row, rowIndex) => (
@@ -23,6 +23,7 @@ export const GameBoard = ({ state, onSelectCell }: GameBoardProps) => {
               <GameButton
                 cellValue={state[rowIndex][colIndex]}
                 cellIndex={[rowIndex, colIndex]}
+                isDisabled={isDisabled}
                 onSelectCell={onSelectCell}
               />
             </div>
@@ -36,16 +37,18 @@ export const GameBoard = ({ state, onSelectCell }: GameBoardProps) => {
 export type CellIndex = [number, number];
 
 interface GameButtonProps {
-  cellValue: CellValue;
+  cellValue: CellValueEnum;
   cellIndex: CellIndex;
+  isDisabled: boolean;
   onSelectCell: (index: CellIndex) => void;
 }
 
-export const GameButton = ({ cellValue, cellIndex, onSelectCell }: GameButtonProps) => {
+export const GameButton = ({ cellValue, cellIndex, isDisabled, onSelectCell }: GameButtonProps) => {
   switch (cellValue) {
-    case '':
+    case CellValueEnum.Empty:
       return (
         <Button
+          disabled={isDisabled}
           onClick={() => {
             onSelectCell(cellIndex);
           }}
@@ -53,10 +56,10 @@ export const GameButton = ({ cellValue, cellIndex, onSelectCell }: GameButtonPro
           <MinusIcon className="size-12" />
         </Button>
       );
-    case 'x':
+    case CellValueEnum.X:
       return <XMarkIcon className="size-20" />;
 
-    case 'o':
+    case CellValueEnum.O:
       return <CircleIcon className="size-20" />;
     default:
       return <MinusIcon className="size-12" />;

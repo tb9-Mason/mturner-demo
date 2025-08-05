@@ -45,6 +45,25 @@ export type Artist = {
   uuid: Scalars['ID']['output'];
 };
 
+export enum CellValueEnum {
+  Empty = 'Empty',
+  O = 'O',
+  X = 'X'
+}
+
+export type GameState = {
+  __typename?: 'GameState';
+  board: Array<Array<CellValueEnum>>;
+  gameOver: Scalars['Boolean']['output'];
+  winner?: Maybe<Scalars['String']['output']>;
+};
+
+/** Game move input fields */
+export type MakeMoveInput = {
+  board: Array<Array<CellValueEnum>>;
+  difficulty: Scalars['String']['input'];
+};
+
 export type Member = {
   __typename?: 'Member';
   artists: Array<Artist>;
@@ -56,7 +75,13 @@ export type Member = {
 
 export type Mutation = {
   __typename?: 'Mutation';
+  makeMove: GameState;
   updateUserRating: Album;
+};
+
+
+export type MutationMakeMoveArgs = {
+  data: MakeMoveInput;
 };
 
 
@@ -112,7 +137,15 @@ export type ArtistsQueryVariables = Exact<{ [key: string]: never; }>;
 
 export type ArtistsQuery = { __typename?: 'Query', artists: Array<{ __typename?: 'Artist', uuid: string, name: string, startYear: number, endYear?: number | null }> };
 
+export type SendMoveMutationVariables = Exact<{
+  data: MakeMoveInput;
+}>;
+
+
+export type SendMoveMutation = { __typename?: 'Mutation', makeMove: { __typename?: 'GameState', board: Array<Array<CellValueEnum>>, gameOver: boolean, winner?: string | null } };
+
 
 export const AlbumsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Albums"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"albums"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"releaseDate"}},{"kind":"Field","name":{"kind":"Name","value":"uuid"}},{"kind":"Field","name":{"kind":"Name","value":"staticRating"}},{"kind":"Field","name":{"kind":"Name","value":"userRating"}},{"kind":"Field","name":{"kind":"Name","value":"link"}},{"kind":"Field","name":{"kind":"Name","value":"artist"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<AlbumsQuery, AlbumsQueryVariables>;
 export const UpdateAlbumRatingDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateAlbumRating"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateUserRatingInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateUserRating"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uuid"}},{"kind":"Field","name":{"kind":"Name","value":"userRating"}}]}}]}}]} as unknown as DocumentNode<UpdateAlbumRatingMutation, UpdateAlbumRatingMutationVariables>;
 export const ArtistsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Artists"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"artists"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"uuid"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"startYear"}},{"kind":"Field","name":{"kind":"Name","value":"endYear"}}]}}]}}]} as unknown as DocumentNode<ArtistsQuery, ArtistsQueryVariables>;
+export const SendMoveDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"SendMove"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"MakeMoveInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"makeMove"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"board"}},{"kind":"Field","name":{"kind":"Name","value":"gameOver"}},{"kind":"Field","name":{"kind":"Name","value":"winner"}}]}}]}}]} as unknown as DocumentNode<SendMoveMutation, SendMoveMutationVariables>;
